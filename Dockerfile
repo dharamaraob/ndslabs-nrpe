@@ -18,11 +18,13 @@ RUN apt-get update -y && \
           --libdir=/usr/lib/nagios \
           --enable-command-args && \
     make && make install && rm /usr/sbin/nrpe && \
+    ln -s /usr/bin/nrpe /usr/sbin/nrpe && \
     apt-get remove -y libssl-dev wget && rm -r /nrpe-2.15 && rm /nagios-nrpe_2.15.orig.tar.gz
     
 
 EXPOSE 5666
 
+COPY plugins/* /usr/lib/nagios/plugins/
 COPY nrpe.cfg /etc/nagios/nrpe.cfg
 COPY nrpe-entrypoint.sh /nrpe-entrypoint.sh
 ENTRYPOINT ["/nrpe-entrypoint.sh"]
